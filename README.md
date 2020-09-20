@@ -15,7 +15,7 @@
    * [macOS](#macos)
    * [iOS](#ios)
 * [Pending Issues](#pending-issues)
-* [App Store](#app-store)
+   * [App Store](#app-store)
 
 # Preparation
 Checkout and open project with XCode. You need openssl.framework (https://github.com/krzyzanowskim/OpenSSL) inside same folder.
@@ -51,7 +51,7 @@ To capture ads - correspondingly the shown ad.
 ### Move
 To capture map shifts - correspondingly the new center.
 ```objective-c
-[[Statistics instance] move:latitude longitude:longitude];
+[[Statistics instance] move:$latitude longitude:$longitude];
 ```
 
 ### Open
