@@ -71,7 +71,7 @@
  * @endcode
  * 3. Transfer action.
  * @code
- * [[Statistics instance] event:@"action" value:@"Value"];
+ * [[Statistics instance] event:@"action" value:@"value"];
  * @endcode
  *
  * @~german
@@ -125,7 +125,7 @@
  * @endcode
  * 3. Aktion übermitteln.
  * @code
- * [[Statistics instance] event:@"action" value:@"Value"];
+ * [[Statistics instance] event:@"action" value:@"value"];
  * @endcode
  */
 @interface Statistics : NSObject {
