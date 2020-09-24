@@ -105,7 +105,6 @@ static Statistics *m_statisticInstance;
     [message appendString:[NSString stringWithFormat:@"&action=%@", eventName]];
   if ( [value length] > 0 )
     [message appendString:[NSString stringWithFormat:@"&value=%@", value]];
-  NSLog( @"POST: %@", message );
   [self sendMessage:message];
 }
 
