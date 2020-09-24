@@ -197,12 +197,18 @@ static Statistics *m_statisticInstance;
 
   /* radio - */
   #if TARGET_OS_IPHONE && !(TARGET_OS_WATCH) && !(TARGET_OS_TV)
-//  CTTelephonyNetworkInfo *telephonyInfo = [CTTelephonyNetworkInfo new];
-//  NSString *currentRadioAccess = [telephonyInfo.currentRadioAccessTechnology stringByReplacingOccurrencesOfString:@"CTRadioAccessTechnology" withString:@""];
-//  if ( [currentRadioAccess length] == 0 )
-//    currentRadioAccess = @"None";
-//  if ( ![currentRadioAccess isEqualToString:@"None"] )
-//    [core appendString:[NSString stringWithFormat:@"radio=%@&", currentRadioAccess]];
+  CTTelephonyNetworkInfo *telephonyInfo = [CTTelephonyNetworkInfo new];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_12_0
+   // TODO: Write code to find the current radio access technologie
+   NSLog(@"%@", [telephonyInfo serviceCurrentRadioAccessTechnology]);
+   NSString *currentRadioAccess = @""; //[telephonyInfo.serviceCurrentRadioAccessTechnology];
+#else
+  NSString *currentRadioAccess = [telephonyInfo.currentRadioAccessTechnology stringByReplacingOccurrencesOfString:@"CTRadioAccessTechnology" withString:@""];
+#endif
+  if ( [currentRadioAccess length] == 0 )
+    currentRadioAccess = @"None";
+  if ( ![currentRadioAccess isEqualToString:@"None"] )
+    [core appendString:[NSString stringWithFormat:@"radio=%@&", currentRadioAccess]];
   #endif
 
   /* app block */
@@ -278,6 +284,7 @@ static Statistics *m_statisticInstance;
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
     [request setHTTPBody:[message dataUsingEncoding:NSUTF8StringEncoding]];
 
+    // TODO: Move to NSURLSeession
     if ( [NSThread isMainThread] ) {
 
       m_lastMessage = message;
@@ -302,7 +309,7 @@ static Statistics *m_statisticInstance;
 
 - (void)addOutstandingMessage:(NSString *)message {
 
-  NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.vx.statistics"];
+  NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.vxstats.objc"];
   /* add to queue */
   NSMutableArray *messages = [NSMutableArray arrayWithArray:[userDefaults objectForKey:@"offline"]];
   [messages addObject:message];
@@ -312,7 +319,7 @@ static Statistics *m_statisticInstance;
 
 - (void)sendOutstandingMessages {
 
-  NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.vx.statistics"];
+  NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.vxstats.objc"];
   NSArray *messages = [userDefaults objectForKey:@"offline"];
   [userDefaults removeObjectForKey:@"offline"];
   [userDefaults synchronize];

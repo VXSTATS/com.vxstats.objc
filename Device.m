@@ -58,7 +58,7 @@ static Device *m_deviceInstance;
     NSString *address = [self firstMacAddress];
     if ( address.length <= 0 || address.length > 17 || [address isEqualToString:@"00:00:00:00:00:00"] || [address isEqualToString:@"02:00:00:00:00:00"] ) {
 
-      NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.vx.statistics"];
+      NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.vxstat.objc"];
       NSString *uuid = [userDefaults objectForKey:@"uuid"];
       if ( uuid == nil ) {
 
