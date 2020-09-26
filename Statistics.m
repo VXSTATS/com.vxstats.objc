@@ -286,12 +286,8 @@ static Statistics *m_statisticInstance;
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
     [request setHTTPBody:[message dataUsingEncoding:NSUTF8StringEncoding]];
 
-    // TODO: Move to NSURLSeession
-    // Create the URLSession on the default configuration
     NSURLSessionConfiguration *defaultSessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration:defaultSessionConfiguration delegate:self delegateQueue:nil];
-
-    // Create dataTask
     NSURLSessionDataTask *session = [defaultSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
 
       if ( response == nil || error != nil ) {
