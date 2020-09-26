@@ -27,7 +27,9 @@ All values are defined over Info.plist and used from there.
 ## Setup
 Setup your environment with your credentials. Please insert your username, password and url here. For defuscation please follow our best practice documentation.
 ```objective-c
-[[Statistics instance] serverFilePath:@"https://$username:$password@$url/"];
+[[Statistics instance] username:@"$username"];
+[[Statistics instance] password:@"$password"];
+[[Statistics instance] serverFilePath:@"https://$url"];
 ```
 
 ## Page
