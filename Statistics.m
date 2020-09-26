@@ -1,15 +1,15 @@
 /*
- * Copyright (C) 01/10/2020 VX APPS <sales@vxapps.com>
+ * Copyright (C) 10/01/2020 VX APPS <sales@vxapps.com>
  *
- * The ownership of this document rests with the VX APPS. It is
- * strictly prohibited to change, sell or publish it in any way. In case
- * you have access to this document, you are obligated to ensure its
- * nondisclosure. Noncompliances will be prosecuted.
+ * This document is property of VX APPS. It is strictly prohibited
+ * to modify, sell or publish it in any way. In case you have access
+ * to this document, you are obligated to ensure its nondisclosure.
+ * Noncompliances will be prosecuted.
  *
- * Diese Datei ist Eigentum der VX APPS. Ändern, verkaufen oder
- * auf eine andere Weise verbreiten und öffentlich machen ist strikt
- * untersagt. Falls Sie Zugang zu dieser Datei haben, sind Sie
- * verpflichtet alles Mögliche für deren Geheimhaltung zu tun.
+ * Diese Datei ist Eigentum der VX APPS. Jegliche Änderung, Verkauf
+ * oder andere Verbreitung und Veröffentlichung ist strikt untersagt.
+ * Falls Sie Zugang zu dieser Datei haben, sind Sie verpflichtet,
+ * alles in Ihrer Macht stehende für deren Geheimhaltung zu tun.
  * Zuwiderhandlungen werden strafrechtlich verfolgt.
  */
 
@@ -62,6 +62,8 @@ static Statistics *m_statisticInstance;
 
 - (void)manualUpdate { [self updateInterfaceWithReachability:m_reachability]; }
 - (void)serverFilePath:(NSString *)serverFilePath { m_serverFilePath = serverFilePath; }
+- (void)username:(NSString *)username { m_username = username; }
+- (void)password:(NSString *)password { m_password = password; }
 
 - (void)page:(NSString *)pageName {
 
@@ -270,8 +272,8 @@ static Statistics *m_statisticInstance;
 
   if ( [m_serverFilePath length] == 0 ) {
 
-    NSLog(@"%s %i: Bad implementation - 'serverFilePath' is empty", __PRETTY_FUNCTION__, __LINE__);
-    return;
+    NSLog(@"%s %i: Bad implementation - 'serverFilePath' is empty - using: 'https://sandbox.vxstats.com'", __PRETTY_FUNCTION__, __LINE__);
+    m_serverFilePath = @"https://sandbox.vxstats.com";
   }
 
   BOOL tracking = YES;
@@ -285,23 +287,22 @@ static Statistics *m_statisticInstance;
     [request setHTTPBody:[message dataUsingEncoding:NSUTF8StringEncoding]];
 
     // TODO: Move to NSURLSeession
-    if ( [NSThread isMainThread] ) {
+    // Create the URLSession on the default configuration
+    NSURLSessionConfiguration *defaultSessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration:defaultSessionConfiguration delegate:self delegateQueue:nil];
 
-      m_lastMessage = message;
-      [NSURLConnection connectionWithRequest:request delegate:self];
-    }
-    else {
+    // Create dataTask
+    NSURLSessionDataTask *session = [defaultSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
 
-      NSError *error = nil;
-      NSData *response = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
       if ( response == nil || error != nil ) {
 
-        #ifdef DEBUG
-        NSLog(@"%s %i: Synchronous connection (not in main thread) failed with error: '%@'", __PRETTY_FUNCTION__, __LINE__, error);
-        #endif
+#ifdef DEBUG
+        NSLog(@"%s %i: Request failed with error: '%@'", __PRETTY_FUNCTION__, __LINE__, error);
+#endif
         [self addOutstandingMessage:message];
       }
-    }
+    }];
+    [session resume];
   }
   else
     [self addOutstandingMessage:message];
@@ -309,7 +310,7 @@ static Statistics *m_statisticInstance;
 
 - (void)addOutstandingMessage:(NSString *)message {
 
-  NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.vxstats.objc"];
+  NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.vxstats.statistics"];
   /* add to queue */
   NSMutableArray *messages = [NSMutableArray arrayWithArray:[userDefaults objectForKey:@"offline"]];
   [messages addObject:message];
@@ -319,7 +320,7 @@ static Statistics *m_statisticInstance;
 
 - (void)sendOutstandingMessages {
 
-  NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.vxstats.objc"];
+  NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.vxstats.statistics"];
   NSArray *messages = [userDefaults objectForKey:@"offline"];
   [userDefaults removeObjectForKey:@"offline"];
   [userDefaults synchronize];
@@ -352,14 +353,12 @@ static Statistics *m_statisticInstance;
   [self updateInterfaceWithReachability:reachability];
 }
 
-#pragma mark - URLConnection delegate
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-
-  #ifdef DEBUG
-  NSLog(@"%s %i: Asynchronous connection (run in main thread) failed with error: %@ %@", __PRETTY_FUNCTION__, __LINE__, error, connection);
-  #endif
-  [self addOutstandingMessage:m_lastMessage];
+  NSURLCredential *credential = [NSURLCredential credentialWithUser:m_username password:m_password persistence:NSURLCredentialPersistenceNone];
+  [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+  completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+  NSLog(@"Finished Challenge");
 }
 
 #pragma mark - Statistics instance

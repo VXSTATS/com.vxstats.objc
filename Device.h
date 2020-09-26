@@ -1,15 +1,15 @@
 /*
- * Copyright (C) 01/10/2020 VX APPS <sales@vxapps.com>
+ * Copyright (C) 10/01/2020 VX APPS <sales@vxapps.com>
  *
- * The ownership of this document rests with the VX APPS. It is
- * strictly prohibited to change, sell or publish it in any way. In case
- * you have access to this document, you are obligated to ensure its
- * nondisclosure. Noncompliances will be prosecuted.
+ * This document is property of VX APPS. It is strictly prohibited
+ * to modify, sell or publish it in any way. In case you have access
+ * to this document, you are obligated to ensure its nondisclosure.
+ * Noncompliances will be prosecuted.
  *
- * Diese Datei ist Eigentum der VX APPS. Ändern, verkaufen oder
- * auf eine andere Weise verbreiten und öffentlich machen ist strikt
- * untersagt. Falls Sie Zugang zu dieser Datei haben, sind Sie
- * verpflichtet alles Mögliche für deren Geheimhaltung zu tun.
+ * Diese Datei ist Eigentum der VX APPS. Jegliche Änderung, Verkauf
+ * oder andere Verbreitung und Veröffentlichung ist strikt untersagt.
+ * Falls Sie Zugang zu dieser Datei haben, sind Sie verpflichtet,
+ * alles in Ihrer Macht stehende für deren Geheimhaltung zu tun.
  * Zuwiderhandlungen werden strafrechtlich verfolgt.
  */
 
@@ -18,10 +18,12 @@
 
 /**
  * @~english
- * @brief Information of the device.
+ * @brief The Device class.
+ * Delivers information about current device.
  *
  * @~german
- * @brief Informationen über das Gerät.
+ * @brief Die Device Klasse.
+ * Liefert Informationen zum aktuellen Gerät.
  */
 @interface Device : NSObject {
 
@@ -40,19 +42,19 @@
    * @brief The device unique identifier.
    *
    * @~german
-   * @brief Die eindeutige Id des Gerätes.
+   * @brief Die eindeutige Id des Geräts.
    */
   NSString *m_uniqueIdentifier;
 }
 
 /**
  * @~english
- * @brief Has the device been jailbroken?
- * @return True, if the device is jailbroken - otherwise false.
+ * @brief Returns true, if the device is jailbroken - otherwiese false.
+ * @return True, if the device is jailbroken - otherweise false.
  *
  * @~german
- * @brief Wurde das Gerät gejailbreakt?
- * @return Wahr, wenn das Gerät gejailbreakt wurde - sonst falsch.
+ * @brief Gibt wahr zurück, wenn das Gerät gejailbreakt ist - sonst falsch.
+ * @return Wahr, wenn das Gerät gejailbreakt ist - sonst falsch.
  */
 + (BOOL)isJailbroken;
 
@@ -69,23 +71,23 @@
 
 /**
  * @~english
- * @brief The device, e.g. iPhone.
- * @return The device.
+ * @brief Returns the device model. E.g. iPhone
+ * @return The device model.
  *
  * @~german
- * @brief Das Gerät, z.B. iPhone.
- * @return Das Gerät.
+ * @brief Gibt das Gerätemodell zurück. Bsp.: iPhone
+ * @return Das Gerätemodell.
  */
 - (NSString *)model;
 
 /**
  * @~english
- * @brief The version of the device, e.g. 8,1.
- * @return The version of the device.
+ * @brief Returns the device version. E.g. 8,1
+ * @return The device version.
  *
- * @~german
- * @brief Die Version des Gerätes, z.B. 8,1
- * @brief Die Version des Gerätes.
+ * @~english
+ * @brief Gibt die Geräteversion zurück. Bsp.: 8,1
+ * @return Die Geräteversion.
  */
 - (NSString *)version;
 
@@ -113,25 +115,23 @@
 
 /**
  * @~english
- * @brief An unique ID of the device, also known as MD5 over network address or
- * one time generated uuid.
- * @return An unique ID of the device.
+ * @brief Unique identifier for current device.
+ * @return The unique identifier for the current device.
  *
  * @~german
- * @brief Eine eindeutige ID des Gerätes oder auch bekannt als MD5 der Mac
- * Adresse oder einamlig generierte UUID.
- * @return Eine eindeutige ID des Gerätes.
+ * @brief Eindeutige Id des Geräts.
+ * @return Eindeutige Id des Geräts.
  */
 - (NSString *)uniqueIdentifier;
 
 /**
  * @~english
- * @brief Object for the current device.
- * @return The instance for the current device.
+ * @brief Instance of Device. C++11 Singleton thread-safe.
+ * @return Singleton of Device.
  *
  * @~german
- * @brief Objekt für das aktuelle Gerät.
- * @return Die Instanz für das aktuelle Gerät.
+ * @brief Instanz von Device.
+ * @return Einzige Instanz von Device.
  */
 + (Device *)currentDevice;
 

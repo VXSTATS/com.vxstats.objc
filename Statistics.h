@@ -1,15 +1,15 @@
 /*
- * Copyright (C) 01/10/2020 VX APPS <sales@vxapps.com>
+ * Copyright (C) 10/01/2020 VX APPS <sales@vxapps.com>
  *
- * The ownership of this document rests with the VX APPS. It is
- * strictly prohibited to change, sell or publish it in any way. In case
- * you have access to this document, you are obligated to ensure its
- * nondisclosure. Noncompliances will be prosecuted.
+ * This document is property of VX APPS. It is strictly prohibited
+ * to modify, sell or publish it in any way. In case you have access
+ * to this document, you are obligated to ensure its nondisclosure.
+ * Noncompliances will be prosecuted.
  *
- * Diese Datei ist Eigentum der VX APPS. Ändern, verkaufen oder
- * auf eine andere Weise verbreiten und öffentlich machen ist strikt
- * untersagt. Falls Sie Zugang zu dieser Datei haben, sind Sie
- * verpflichtet alles Mögliche für deren Geheimhaltung zu tun.
+ * Diese Datei ist Eigentum der VX APPS. Jegliche Änderung, Verkauf
+ * oder andere Verbreitung und Veröffentlichung ist strikt untersagt.
+ * Falls Sie Zugang zu dieser Datei haben, sind Sie verpflichtet,
+ * alles in Ihrer Macht stehende für deren Geheimhaltung zu tun.
  * Zuwiderhandlungen werden strafrechtlich verfolgt.
  */
 
@@ -62,7 +62,7 @@
  * @b Example:
  * @n 1. Define a path to the statistics server.
  * @code
- * [[Statistics instance] serverFilePath:@"https://www.vxapps.com/u/stats.php"];
+ * [[Statistics instance] serverFilePath:@"https://sandbox.vxstats.com"];
  * @endcode
  * 2. Transfer page impression.
  * @code
@@ -116,7 +116,7 @@
  * @b Beispiel:
  * @n 1. Angeben eines Pfads zum Statistikserver.
  * @code
- * [[Statistics instance] serverFilePath:@"https://www.vxapps.com/u/stats.php"];
+ * [[Statistics instance] serverFilePath:@"https://sandbox.vxstats.com"];
  * @endcode
  * 2. Seitenimpression übermitteln.
  * @code
@@ -148,6 +148,24 @@
    * @brief Der Pfad zum Statistikserver.
    */
   NSString *m_serverFilePath;
+  
+  /**
+   * @~english
+   * @brief Username for authentication.
+   *
+   * @~german
+   * @brief Benutzername für die Authorisierung.
+   */
+  NSString *m_username;
+  
+  /**
+   * @~english
+   * @brief Password for authentication.
+   *
+   * @~german
+   * @brief Passwort für die Authorisierung.
+   */
+  NSString *m_password;
 
   /**
    * @~english
@@ -208,22 +226,26 @@
  * @param serverFilePath   The file name to the statistics server.
  *
  * @b Example:
- * @n for the HTTPS address www.vxapps.com and the folder u/stats.php.
+ * @n for the HTTPS address sandbox.vxstats.com and the folder /.
  *
  * @~german
  * @brief Definiert den Pfad und Namen zum Statistikserver.
  *
  * @b Beispiel:
- * @n Für die HTTPS Adresse www.vxapps.com und dem Verzeichnis u/stats.php.
+ * @n Für die HTTPS Adresse sandbox.vxstats.com und dem Verzeichnis /.
  *
  * @param serverFilePath   Der Dateiname zum Statistikserver.
  *
  * @~
  * @code
- * [[Statistics instance] serverFilePath:@"https://www.vxapps.com/u/stats.php"];
+ * [[Statistics instance] serverFilePath:@"https://sandbox.vxstats.com"];
  * @endcode
  */
 - (void)serverFilePath:(NSString *)serverFilePath;
+
+- (void)username:(NSString *)username;
+
+- (void)password:(NSString *)password;
 
 /**
  * @~german
@@ -298,7 +320,7 @@
  * @~
  * @code
  * [[Statistics instance] event:@"open" withValue:urlOrName];
- * [[Statistics instance] event:@"open" withValue:@"https://www.vxapps.com"];
+ * [[Statistics instance] event:@"open" withValue:@"https://www.vxstat.com"];
  * @endcode
  *
  * @see Statistics#open:
@@ -318,7 +340,7 @@
  * @~
  * @code
  * [[Statistics instance] event:@"play" withValue:urlOrName];
- * [[Statistics instance] event:@"play" withValue:@"https://www.vxapps.com/movie.m4v"];
+ * [[Statistics instance] event:@"play" withValue:@"https://www.vxstats.com/movie.m4v"];
  * @endcode
  *
  * @see Statistics#play:

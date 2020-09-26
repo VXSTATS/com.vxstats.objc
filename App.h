@@ -1,15 +1,15 @@
 /*
- * Copyright (C) 01/10/2020 VX APPS <sales@vxapps.com>
+ * Copyright (C) 10/01/2020 VX APPS <sales@vxapps.com>
  *
- * The ownership of this document rests with the VX APPS. It is
- * strictly prohibited to change, sell or publish it in any way. In case
- * you have access to this document, you are obligated to ensure its
- * nondisclosure. Noncompliances will be prosecuted.
+ * This document is property of VX APPS. It is strictly prohibited
+ * to modify, sell or publish it in any way. In case you have access
+ * to this document, you are obligated to ensure its nondisclosure.
+ * Noncompliances will be prosecuted.
  *
- * Diese Datei ist Eigentum der VX APPS. Ändern, verkaufen oder
- * auf eine andere Weise verbreiten und öffentlich machen ist strikt
- * untersagt. Falls Sie Zugang zu dieser Datei haben, sind Sie
- * verpflichtet alles Mögliche für deren Geheimhaltung zu tun.
+ * Diese Datei ist Eigentum der VX APPS. Jegliche Änderung, Verkauf
+ * oder andere Verbreitung und Veröffentlichung ist strikt untersagt.
+ * Falls Sie Zugang zu dieser Datei haben, sind Sie verpflichtet,
+ * alles in Ihrer Macht stehende für deren Geheimhaltung zu tun.
  * Zuwiderhandlungen werden strafrechtlich verfolgt.
  */
 
@@ -18,76 +18,79 @@
 
 /**
  * @~english
- * @brief Information about the application.
+ * @brief The App class.
+ * General information about the running app including validation of fair use.
  *
  * @~german
- * @brief Informationen über die Anwendung.
+ * @brief Die Klasse App.
+ * Bietet allgemeine Informationen über die Anwendung und eine Überprüfung
+ * der fairen Verwendung.
  */
 @interface App : NSObject {}
 
 /**
  * @~english
- * @brief Has the DRM been deleted from the application?
- + @return True, DRM exists - otherwise false.
+ * @brief Returns true, if the app is fairly used.
+ * @return True, if the app is fairly used - otherwise false.
  *
  * @~german
- * @brief Wurde das DRM aus der Anwendung entfernt?
- * @return Wahr, DRM ist vorhanden - sonst Falsch.
+ * @brief Gibt wahr zurück, wenn die Anwendung fair verwendet wird.
+ * @return Wahr, wenn die Anwendung fair verwendet wird - sonst falsch.
  */
 + (BOOL)fairUse;
 
 /**
  * @~english
- * @brief The name of the application as defined under CFBundleDisplayName.
- * @return The name of the application.
+ * @brief Returns the name of application. E.g. My Application (CFBundleDisplayName)
+ * @return Identifier of application.
  *
  * @~german
- * @brief Der Name der Anwendung, wie definiert unter CFBundleDisplayName.
- * @return Der Name der Anwendung.
+ * @brief Gibt dien Namen der Anwendung zurück. Bsp.: Meine Anwendung (CFBundleDisplayName)
+ * @return Id der Anwendug.
  */
 + (NSString *)name;
 
 /**
  * @~english
- * @brief The version of the application as defined under CFBundleShortVersionString.
- * @return The version of the application.
+ * @brief Returns the version of application. E.g. 1.0 (CFBundleShortVersionString)
+ * @return Version of application.
  *
  * @~german
- * @brief Die Version der Anwendung, wie definiert unter CFBundleShortVersionString.
- * @return Die Version der Anwendung.
+ * @brief Gibt die Version der Anwendung zurück. Bsp.: 1.0 (CFBundleShortVersionString)
+ * @return Version der Anwendung.
  */
 + (NSString *)version;
 
 /**
  * @~english
- * @brief The build of the application as defined under CFBundleVersion.
- * @return The build of the application.
+ * @brief Returns the build of application. E.g. 100, 3A4E (CFBundleVersion)
+ * @return Build of application.
  *
  * @~german
- * @brief Die Buildnummer der Anwendung, wie definiert unter CFBundleVersion.
- * @return Die Buildnummer der Anwendung.
+ * @brief Gibt den Build der Anwendung zurück. Bsp.: 100, 3A4E (CFBundleVersion)
+ * @return Build der Anwendung.
  */
 + (NSString *)build;
 
 /**
  * @~english
- * @brief The identifier of the application as defined under CFBundleIdentifier.
- * @return The identifier of the application.
+ * @brief Returns the identifier of application. E.g. com.app.name (CFBundleIdentifier)
+ * @return Identifier of application.
  *
  * @~german
- * @brief Der Identifier der Anwendung, wie definiert unter CFBundleIdentifier.
- * @return Der Identifier der Anwendung.
+ * @brief Gibt die Id der Anwendung zurück. Bsp.: de.anwendung.name (CFBundleIdentifier)
+ * @return Id der Anwendug.
  */
 + (NSString *)identifier;
 
 /**
  * @~english
- * @brief Object for the current application.
- * @return The instance for the current application.
+ * @brief Instance of App.
+ * @return Singleton of App.
  *
  * @~german
- * @brief Objekt für die aktuelle Anwendung.
- * @return Die Instanz für die aktuelle Anwendung.
+ * @brief Instanz von App.
+ * @return Einzige Instanz von App.
  */
 + (App *)currentApp;
 
