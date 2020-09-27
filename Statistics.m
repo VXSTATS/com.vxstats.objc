@@ -208,9 +208,9 @@ static Statistics *m_statisticInstance;
   #if TARGET_OS_IPHONE && !(TARGET_OS_WATCH) && !(TARGET_OS_TV)
   CTTelephonyNetworkInfo *telephonyInfo = [CTTelephonyNetworkInfo new];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_12_0
-   // TODO: Write code to find the current radio access technologie
-   NSLog(@"Tele: %@", [telephonyInfo serviceCurrentRadioAccessTechnology]);
-   NSString *currentRadioAccess = @""; //[telephonyInfo.serviceCurrentRadioAccessTechnology];
+  // TODO: Write code to find the current radio access technologie
+  NSLog(@"Tele: %@", [telephonyInfo serviceCurrentRadioAccessTechnology]);
+  NSString *currentRadioAccess = @""; //[telephonyInfo.serviceCurrentRadioAccessTechnology];
 #else
   NSString *currentRadioAccess = [telephonyInfo.currentRadioAccessTechnology stringByReplacingOccurrencesOfString:@"CTRadioAccessTechnology" withString:@""];
 #endif

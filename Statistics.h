@@ -222,7 +222,6 @@
 /**
  * @~english
  * @brief Defines the path and name to the statistics server.
- *
  * @param serverFilePath   The file name to the statistics server.
  *
  * @b Example:
@@ -230,11 +229,9 @@
  *
  * @~german
  * @brief Definiert den Pfad und Namen zum Statistikserver.
- *
+ * @param serverFilePath   Der Dateiname zum Statistikserver.
  * @b Beispiel:
  * @n Für die HTTPS Adresse sandbox.vxstats.com und dem Verzeichnis /.
- *
- * @param serverFilePath   Der Dateiname zum Statistikserver.
  *
  * @~
  * @code
@@ -243,8 +240,36 @@
  */
 - (void)serverFilePath:(NSString *)serverFilePath;
 
+/**
+ * @~english
+ * @brief Defines the username to the statistics server.
+ * @param username   The username to the statistics server.
+ *
+ * @~german
+ * @brief Definiert den Benutzernamen zum Statistikserver.
+ * @param username   Der Benutzername zum Statistikserver.
+ *
+ * @~
+ * @code
+ * [[Statistics instance] username:@"sandbox"];
+ * @endcode
+ */
 - (void)username:(NSString *)username;
 
+/**
+ * @~english
+ * @brief Defines the password to the statistics server.
+ * @param username   The password to the statistics server.
+ *
+ * @~german
+ * @brief Definiert das Passwort zum Statistikserver.
+ * @param username   Das Passwoort zum Statistikserver.
+ *
+ * @~
+ * @code
+ * [[Statistics instance] password:@"sandbox"];
+ * @endcode
+ */
 - (void)password:(NSString *)password;
 
 /**
