@@ -191,8 +191,15 @@ static Statistics *m_statisticInstance;
   [core appendString:[NSString stringWithFormat:@"vendor=%@&", @"Apple Inc."]];
 
   /* locale */
-  [core appendString:[NSString stringWithFormat:@"language=%@&", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]]];
-  [core appendString:[NSString stringWithFormat:@"country=%@&", [[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]]];
+  NSLocale *locale = [NSLocale currentLocale];
+  [core appendString:[NSString stringWithFormat:@"language=%@&", [locale objectForKey:NSLocaleLanguageCode]]];
+  NSString *country = [locale objectForKey:NSLocaleCountryCode];
+  /* TODO: Write a map? Does it only come from simulator!? */
+  if ( [country length] == 0 ) {
+    
+    country = @"US";
+  }
+  [core appendString:[NSString stringWithFormat:@"country=%@&", country]];
 
   /* connection - wlan, wan, none */
   [core appendString:[NSString stringWithFormat:@"connection=%@&", m_status]];
@@ -202,7 +209,7 @@ static Statistics *m_statisticInstance;
   CTTelephonyNetworkInfo *telephonyInfo = [CTTelephonyNetworkInfo new];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_12_0
    // TODO: Write code to find the current radio access technologie
-   NSLog(@"%@", [telephonyInfo serviceCurrentRadioAccessTechnology]);
+   NSLog(@"Tele: %@", [telephonyInfo serviceCurrentRadioAccessTechnology]);
    NSString *currentRadioAccess = @""; //[telephonyInfo.serviceCurrentRadioAccessTechnology];
 #else
   NSString *currentRadioAccess = [telephonyInfo.currentRadioAccessTechnology stringByReplacingOccurrencesOfString:@"CTRadioAccessTechnology" withString:@""];
@@ -351,10 +358,23 @@ static Statistics *m_statisticInstance;
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
 
-  NSURLCredential *credential = [NSURLCredential credentialWithUser:m_username password:m_password persistence:NSURLCredentialPersistenceNone];
-  [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
-  completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
-  NSLog(@"Finished Challenge");
+  NSString *authMethod = [[challenge protectionSpace] authenticationMethod];
+  if ([authMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+
+    NSURLCredential *credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+    completionHandler(NSURLSessionAuthChallengeUseCredential,credential);
+  }
+  else {
+
+    if ( m_username == nil || m_password == nil ) {
+
+      NSLog(@"%s %i: Authentication not possible, username or password empty.", __PRETTY_FUNCTION__, __LINE__);
+      return;
+    }
+    NSURLCredential *credential = [NSURLCredential credentialWithUser:m_username password:m_password persistence:NSURLCredentialPersistencePermanent];
+    [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+    completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+  }
 }
 
 #pragma mark - Statistics instance
