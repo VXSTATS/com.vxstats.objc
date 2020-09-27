@@ -128,7 +128,7 @@
  * [[Statistics instance] event:@"action" value:@"value"];
  * @endcode
  */
-@interface Statistics : NSObject {
+@interface Statistics : NSObject <NSURLSessionDelegate> {
 
 @private
   /**
