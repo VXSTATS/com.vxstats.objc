@@ -23,16 +23,13 @@
 /* local header */
 #import "App.h"
 
-@implementation App
-
 static App *m_appInstance;
+
+@implementation App
 
 - (id)init {
 
-  if ( ( self = [super init] ) ) {
-
-    ;
-  }
+  self = [super init];
   return self;
 }
 
@@ -53,7 +50,7 @@ static App *m_appInstance;
   /* Create a memory buffer to extract the PKCS #7 container */
   BIO *receiptBIO = BIO_new(BIO_s_mem());
   BIO_write(receiptBIO, [receiptData bytes], (int)[receiptData length]);
-  PKCS7 *receiptPKCS7 = d2i_PKCS7_bio(receiptBIO, NULL);
+  PKCS7 *receiptPKCS7 = d2i_PKCS7_bio(receiptBIO, nil);
   if (!receiptPKCS7) {
 
     return NO;
@@ -74,8 +71,8 @@ static App *m_appInstance;
   NSURL *appleRootURL = [[NSBundle mainBundle] URLForResource:@"AppleIncRootCertificate" withExtension:@"cer"];
   NSData *appleRootData = [NSData dataWithContentsOfURL:appleRootURL];
   BIO *appleRootBIO = BIO_new(BIO_s_mem());
-  BIO_write(appleRootBIO, (const void *)[appleRootData bytes], (int)[appleRootData length]);
-  X509 *appleRootX509 = d2i_X509_bio(appleRootBIO, NULL);
+  BIO_write(appleRootBIO, [appleRootData bytes], (int)[appleRootData length]);
+  X509 *appleRootX509 = d2i_X509_bio(appleRootBIO, nil);
 
   /* Create a certificate store */
   X509_STORE *store = X509_STORE_new();
@@ -85,7 +82,7 @@ static App *m_appInstance;
   OpenSSL_add_all_digests();
 
   /* Check the signature */
-  int result = PKCS7_verify(receiptPKCS7, NULL, store, NULL, NULL, 0);
+  int result = PKCS7_verify(receiptPKCS7, nil, store, nil, nil, 0);
   if ( result != 1 ) {
 
     return NO;

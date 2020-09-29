@@ -28,6 +28,8 @@
 @import UIKit;
 #endif
 
+static Statistics *m_statisticInstance;
+
 @interface Statistics (PrivateMethods)
 - (NSString *)coreMessage;
 - (void)sendMessage:(NSString *)message;
@@ -39,8 +41,6 @@
 @implementation Statistics
 
 @synthesize lastPageName;
-
-static Statistics *m_statisticInstance;
 
 #pragma mark - Life cycle
 
@@ -284,11 +284,15 @@ static Statistics *m_statisticInstance;
   }
 
   BOOL tracking = YES;
-  if ( [[NSUserDefaults standardUserDefaults] objectForKey:@"tracking"] )
+  if ( [[NSUserDefaults standardUserDefaults] objectForKey:@"tracking"] ) {
+    
     tracking = [[NSUserDefaults standardUserDefaults] boolForKey:@"tracking"];
-  if ( tracking ) {
+  }
+  
+  NSURL *url = [NSURL URLWithString:m_serverFilePath];
+  if ( tracking && url ) {
 
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:m_serverFilePath]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
     [request setHTTPBody:[message dataUsingEncoding:NSUTF8StringEncoding]];
@@ -307,15 +311,22 @@ static Statistics *m_statisticInstance;
     }];
     [session resume];
   }
-  else
+  else {
+    
     [self addOutstandingMessage:message];
+  }
 }
 
 - (void)addOutstandingMessage:(NSString *)message {
 
   NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.vxstats.statistics"];
   /* add to queue */
-  NSMutableArray *messages = [NSMutableArray arrayWithArray:[userDefaults objectForKey:@"offline"]];
+  NSArray *existingMessages = [userDefaults objectForKey:@"offline"];
+  NSMutableArray *messages = [NSMutableArray alloc];
+  if ( existingMessages != nil ) {
+    
+    [messages addObjectsFromArray:existingMessages];
+  }
   [messages addObject:message];
   [userDefaults setObject:messages forKey:@"offline"];
   [userDefaults synchronize];
@@ -350,11 +361,15 @@ static Statistics *m_statisticInstance;
   }
 }
 
+#pragma mark - Reachability
+
 - (void)reachabilityChanged:(NSNotification *)notification {
 
   Reachability *reachability = [notification object];
   [self updateInterfaceWithReachability:reachability];
 }
+
+#pragma mark - NSURLSession delegate
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
 

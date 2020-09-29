@@ -33,13 +33,13 @@
 @import UIKit;
 #endif
 
+static Device *m_deviceInstance;
+
 @interface Device (PrivateMethods)
 - (NSString *)firstMacAddress;
 @end
 
 @implementation Device
-
-static Device *m_deviceInstance;
 
 - (id)init {
 
@@ -47,9 +47,9 @@ static Device *m_deviceInstance;
 
     /* check for system */
     size_t size;
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    sysctlbyname("hw.machine", nil, &size, nil, 0);
     char *machine = malloc(size);
-    sysctlbyname("hw.machine", machine, &size, NULL, 0);
+    sysctlbyname("hw.machine", machine, &size, nil, 0);
     NSString *platform = [NSString stringWithCString:machine encoding:NSUTF8StringEncoding];
     free(machine);
     m_platform = platform;
@@ -114,11 +114,6 @@ static Device *m_deviceInstance;
     return YES;
   else
     [[NSFileManager defaultManager] removeItemAtPath:@"/private/jailbreak.txt" error:nil];
-
-  /* This will not work until you handle correct ATS, but this created warnings, so this is not save enought to use */
-//  if ( [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"cydia://package/com.example.package"]] )
-//    /* Device is jailbroken */
-//    return YES;
   #endif
 
   /* All checks have failed. Most probably, the device is not jailbroken */
@@ -225,17 +220,17 @@ static Device *m_deviceInstance;
   else {
 
     /* Get the size of the data available (store in len) */
-    if ( sysctl( mgmtInfoBase, 6, NULL, &length, NULL, 0 ) < 0 )
+    if ( sysctl( mgmtInfoBase, 6, nil, &length, nil, 0 ) < 0 )
       errorFlag = @"sysctl mgmtInfoBase failure";
     else {
 
       /* Alloc memory based on above call */
-      if ( ( msgBuffer = malloc( length ) ) == NULL )
+      if ( ( msgBuffer = malloc( length ) ) == nil )
         errorFlag = @"buffer allocation failure";
       else {
 
         /* Get system information, store in buffer */
-        if ( sysctl( mgmtInfoBase, 6, msgBuffer, &length, NULL, 0 ) < 0 )
+        if ( sysctl( mgmtInfoBase, 6, msgBuffer, &length, nil, 0 ) < 0 )
           errorFlag = @"sysctl msgBuffer failure";
       }
     }
@@ -255,6 +250,12 @@ static Device *m_deviceInstance;
 
   /* Map to link-level socket structure */
   socketStruct = (struct sockaddr_dl *) (interfaceMsgStruct + 1);
+  
+  /* nil check */
+  if ( socketStruct == nil ) {
+    
+    return nil;
+  }
 
   /* Copy link layer address data in socket structure to an array */
   memcpy(&macAddress, socketStruct->sdl_data + socketStruct->sdl_nlen, 6);
