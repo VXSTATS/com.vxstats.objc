@@ -148,7 +148,7 @@
    * @brief Der Pfad zum Statistikserver.
    */
   NSString *m_serverFilePath;
-  
+
   /**
    * @~english
    * @brief Username for authentication.
@@ -157,7 +157,7 @@
    * @brief Benutzername für die Authorisierung.
    */
   NSString *m_username;
-  
+
   /**
    * @~english
    * @brief Password for authentication.

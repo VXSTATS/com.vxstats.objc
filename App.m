@@ -37,7 +37,7 @@ static App *m_appInstance;
 
   NSBundle *mainBundle = [NSBundle mainBundle];
   NSURL *receiptURL = [mainBundle appStoreReceiptURL];
-  NSError *receiptError;
+  NSError *receiptError = nil;
   BOOL isPresent = [receiptURL checkResourceIsReachableAndReturnError:&receiptError];
   if ( !isPresent ) {
 
@@ -45,13 +45,13 @@ static App *m_appInstance;
   }
 
   /* Load the receipt file */
-  NSData *receiptData = [NSData dataWithContentsOfURL:receiptURL];
+  const NSData *receiptData = [NSData dataWithContentsOfURL:receiptURL];
 
   /* Create a memory buffer to extract the PKCS #7 container */
   BIO *receiptBIO = BIO_new(BIO_s_mem());
   BIO_write(receiptBIO, [receiptData bytes], (int)[receiptData length]);
   PKCS7 *receiptPKCS7 = d2i_PKCS7_bio(receiptBIO, nil);
-  if (!receiptPKCS7) {
+  if ( !receiptPKCS7 ) {
 
     return NO;
   }
@@ -83,11 +83,7 @@ static App *m_appInstance;
 
   /* Check the signature */
   int result = PKCS7_verify(receiptPKCS7, nil, store, nil, nil, 0);
-  if ( result != 1 ) {
-
-    return NO;
-  }
-  return YES;
+  return result == 1;
 }
 
 + (NSString *)name { return [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleExecutableKey]; }
@@ -97,8 +93,10 @@ static App *m_appInstance;
 
 + (App *)currentApp {
 
-  if ( m_appInstance == nil )
+  if ( m_appInstance == nil ) {
+
     m_appInstance = [[App alloc] init];
+  }
   return m_appInstance;
 }
 

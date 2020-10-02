@@ -90,8 +90,10 @@ static Statistics *m_statisticInstance;
 
 - (void)event:(NSString *)eventName withValue:(NSString *)value {
 
-  if ( [lastPageName length] == 0 )
+  if ( [lastPageName length] == 0 ) {
+
     NSLog(@"%s %i: Bad implementation - 'event': '%@' with empty 'pageName'", __PRETTY_FUNCTION__, __LINE__, eventName);
+  }
 
   eventName = [eventName stringByReplacingOccurrencesOfString:@"&" withString:@"%26"];
   eventName = [eventName stringByReplacingOccurrencesOfString:@"'" withString:@"%2F'"];
@@ -103,17 +105,23 @@ static Statistics *m_statisticInstance;
 
   NSMutableString *message = [[NSMutableString alloc] init];
   [message appendString:[self coreMessage]];
-  if ( [eventName length] > 0 )
+  if ( [eventName length] > 0 ) {
+
     [message appendString:[NSString stringWithFormat:@"&action=%@", eventName]];
-  if ( [value length] > 0 )
+  }
+  if ( [value length] > 0 ) {
+
     [message appendString:[NSString stringWithFormat:@"&value=%@", value]];
+  }
   [self sendMessage:message];
 }
 
 - (void)ads:(NSString *)campaign {
 
-  if ( [campaign length] == 0 )
+  if ( [campaign length] == 0 ) {
+
     NSLog(@"%s %i: Bad implementation - 'ads' with empty 'campaign' name, pageName: %@", __PRETTY_FUNCTION__, __LINE__, lastPageName);
+  }
   else if ( [campaign length] > 255 ) {
 
     NSLog(@"%s %i: Bad implementation - 'campaign': '%@' is larger than 255 signs", __PRETTY_FUNCTION__, __LINE__, campaign);
@@ -124,15 +132,19 @@ static Statistics *m_statisticInstance;
 
 - (void)move:(float)latitude longitude:(float)longitude {
 
-  if ( latitude == 0.0 || longitude == 0.0 )
+  if ( latitude == 0.0 || longitude == 0.0 ) {
+
     NSLog(@"%s %i: Bad implementation - 'move' with empty 'latitude' or 'longitude'", __PRETTY_FUNCTION__, __LINE__);
+  }
   [self event:@"move" withValue:[NSString stringWithFormat:@"%f,%f", latitude, longitude]];
 }
 
 - (void)open:(NSString *)urlOrName {
 
-  if ( [urlOrName length] == 0 )
+  if ( [urlOrName length] == 0 ) {
+
     NSLog(@"%s %i: Bad implementation - 'open' with empty 'urlOrName', pageName: '%@'", __PRETTY_FUNCTION__, __LINE__, lastPageName);
+  }
   else if ( [urlOrName length] > 255 ) {
 
     NSLog(@"%s %i: Bad implementation - 'urlOrName': '%@' is larger than 255 signs", __PRETTY_FUNCTION__, __LINE__, urlOrName);
@@ -143,8 +155,10 @@ static Statistics *m_statisticInstance;
 
 - (void)play:(NSString *)urlOrName {
 
-  if ( [urlOrName length] == 0 )
+  if ( [urlOrName length] == 0 ) {
+
     NSLog(@"%s %i: Bad implementation - 'play' with empty 'urlOrName', pageName: '%@'", __PRETTY_FUNCTION__, __LINE__, lastPageName);
+  }
   else if ( [urlOrName length] > 255 ) {
 
     NSLog(@"%s %i: Bad implementation - 'urlOrName': '%@' is larger than 255 signs", __PRETTY_FUNCTION__, __LINE__, urlOrName);
@@ -155,8 +169,10 @@ static Statistics *m_statisticInstance;
 
 - (void)search:(NSString *)text {
 
-  if ( [text length] == 0 )
+  if ( [text length] == 0 ) {
+
     NSLog(@"%s %i: Bad implementation - 'search' with empty 'text', pageName: '%@'", __PRETTY_FUNCTION__, __LINE__, lastPageName);
+  }
   else if ( [text length] > 255 ) {
 
     NSLog(@"%s %i: Bad implementation - 'text': '%@' is larger than 255 signs", __PRETTY_FUNCTION__, __LINE__, text);
@@ -169,8 +185,10 @@ static Statistics *m_statisticInstance;
 
 - (void)touch:(NSString *)action {
 
-  if ( [action length] == 0 )
+  if ( [action length] == 0 ) {
+
     NSLog(@"%s %i: Bad implementation - 'touch' with empty 'action', pageName: '%@'", __PRETTY_FUNCTION__, __LINE__, lastPageName);
+  }
   else if ( [action length] > 255 ) {
 
     NSLog(@"%s %i: Bad implementation - 'action': '%@' is larger than 255 signs", __PRETTY_FUNCTION__, __LINE__, action);
@@ -196,7 +214,7 @@ static Statistics *m_statisticInstance;
   NSString *country = [locale objectForKey:NSLocaleCountryCode];
   /* TODO: Write a map? Does it only come from simulator!? */
   if ( [country length] == 0 ) {
-    
+
     country = @"US";
   }
   [core appendString:[NSString stringWithFormat:@"country=%@&", country]];
@@ -205,7 +223,7 @@ static Statistics *m_statisticInstance;
   [core appendString:[NSString stringWithFormat:@"connection=%@&", m_status]];
 
   /* radio - */
-  #if TARGET_OS_IPHONE && !(TARGET_OS_WATCH) && !(TARGET_OS_TV)
+#if TARGET_OS_IPHONE && !(TARGET_OS_WATCH) && !(TARGET_OS_TV)
   CTTelephonyNetworkInfo *telephonyInfo = [CTTelephonyNetworkInfo new];
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_12_0
   // TODO: Write code to find the current radio access technologie
@@ -214,52 +232,71 @@ static Statistics *m_statisticInstance;
 #else
   NSString *currentRadioAccess = [telephonyInfo.currentRadioAccessTechnology stringByReplacingOccurrencesOfString:@"CTRadioAccessTechnology" withString:@""];
 #endif
-  if ( [currentRadioAccess length] == 0 )
+  if ( [currentRadioAccess length] == 0 ) {
+
     currentRadioAccess = @"None";
-  if ( ![currentRadioAccess isEqualToString:@"None"] )
+  }
+  if ( ![currentRadioAccess isEqualToString:@"None"] ) {
+
     [core appendString:[NSString stringWithFormat:@"radio=%@&", currentRadioAccess]];
-  #endif
+  }
+#endif
 
   /* app block */
   [core appendString:[NSString stringWithFormat:@"appid=%@&", [App identifier]]];
   [core appendString:[NSString stringWithFormat:@"appversion=%@&", [App version]]];
-  if ( [[App build] length] > 0 && ![[App version] isEqualToString:[App build]] )
+  if ( [[App build] length] > 0 && ![[App version] isEqualToString:[App build]] ) {
+
     [core appendString:[NSString stringWithFormat:@"appbuild=%@&", [App build]]];
+  }
 
   /* is this app fairly used? */
-  if ( [App fairUse] )
+  if ( [App fairUse] ) {
+
     [core appendString:[NSString stringWithFormat:@"fair=%i&", 1]];
+  }
 
   /* is the device jailbroken? */
-  if ( [Device isJailbroken] )
+  if ( [Device isJailbroken] ) {
+
     [core appendString:[NSString stringWithFormat:@"free=%i&", 1]];
+  }
   /* is the device in tabletmode */
   [core appendString:[NSString stringWithFormat:@"tabletmode=%i&", 1]];
   /* is the device with touch screen */
   [core appendString:[NSString stringWithFormat:@"touch=%i&", 1]];
 
   /* does the user use voiceover? */
-  #if TARGET_OS_IPHONE && !(TARGET_OS_WATCH)
-  if ( UIAccessibilityIsVoiceOverRunning() )
-  #else
+#if TARGET_OS_IPHONE && !(TARGET_OS_WATCH)
+  if ( UIAccessibilityIsVoiceOverRunning() ) {
+
+    [core appendString:[NSString stringWithFormat:@"voiceover=%i&", 1]];
+  }
+#else
   Boolean value = false;
   Boolean result = CFPreferencesGetAppBooleanValue( CFSTR( "voiceOverOnOffKey" ), CFSTR( "com.apple.universalaccess" ), &value );
-  if ( value && result )
-  #endif
+  if ( value && result ) {
+
     [core appendString:[NSString stringWithFormat:@"voiceover=%i&", 1]];
+  }
+#endif
 
   /* Screen Resolution */
-  #if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE
   [core appendString:[NSString stringWithFormat:@"width=%.0f&", [[UIScreen mainScreen] bounds].size.width]];
   [core appendString:[NSString stringWithFormat:@"height=%.0f&", [[UIScreen mainScreen] bounds].size.height]];
-  if ( [[UIScreen mainScreen] scale] != 1.0 )
+  if ( [[UIScreen mainScreen] scale] != 1.0 ) {
+
     [core appendString:[NSString stringWithFormat:@"dpr=%.2f&", [[UIScreen mainScreen] scale]]];
-  #else
+  }
+#else
   [core appendString:[NSString stringWithFormat:@"width=%.0f&", [[NSScreen mainScreen] frame].size.width]];
   [core appendString:[NSString stringWithFormat:@"height=%.0f&", [[NSScreen mainScreen] frame].size.height]];
-  if ( [[NSScreen mainScreen] backingScaleFactor] != 1.0 )
+  if ( [[NSScreen mainScreen] backingScaleFactor] != 1.0 ) {
+
     [core appendString:[NSString stringWithFormat:@"dpr=%.2f&", [[NSScreen mainScreen] backingScaleFactor]]];
-  #endif
+  }
+#endif
 
   /* time block */
   [core appendString:[NSString stringWithFormat:@"created=%.0f&", [[NSDate date] timeIntervalSince1970]]];
@@ -285,10 +322,10 @@ static Statistics *m_statisticInstance;
 
   BOOL tracking = YES;
   if ( [[NSUserDefaults standardUserDefaults] objectForKey:@"tracking"] ) {
-    
+
     tracking = [[NSUserDefaults standardUserDefaults] boolForKey:@"tracking"];
   }
-  
+
   NSURL *url = [NSURL URLWithString:m_serverFilePath];
   if ( tracking && url ) {
 
@@ -312,7 +349,7 @@ static Statistics *m_statisticInstance;
     [session resume];
   }
   else {
-    
+
     [self addOutstandingMessage:message];
   }
 }
@@ -324,7 +361,7 @@ static Statistics *m_statisticInstance;
   NSArray *existingMessages = [userDefaults objectForKey:@"offline"];
   NSMutableArray *messages = [NSMutableArray alloc];
   if ( existingMessages != nil ) {
-    
+
     [messages addObjectsFromArray:existingMessages];
   }
   [messages addObject:message];
@@ -339,7 +376,7 @@ static Statistics *m_statisticInstance;
   [userDefaults removeObjectForKey:@"offline"];
   [userDefaults synchronize];
   for ( NSUInteger x = 0; x < [messages count]; ++x )
-    [self sendMessage:[messages objectAtIndex:x]];
+  [self sendMessage:[messages objectAtIndex:x]];
 }
 
 - (void)updateInterfaceWithReachability:(Reachability *)reachability {
@@ -356,8 +393,10 @@ static Statistics *m_statisticInstance;
       [self sendOutstandingMessages];
       m_status = @"WWAN";
     }
-    else
+    else {
+
       m_status = @"Offline";
+    }
   }
 }
 
@@ -396,8 +435,10 @@ static Statistics *m_statisticInstance;
 
 + (Statistics *)instance {
 
-  if ( m_statisticInstance == nil )
+  if ( m_statisticInstance == nil ) {
+
     m_statisticInstance = [[Statistics alloc] init];
+  }
   return m_statisticInstance;
 }
 

@@ -58,7 +58,7 @@ static Device *m_deviceInstance;
     NSString *address = [self firstMacAddress];
     if ( address.length <= 0 || address.length > 17 || [address isEqualToString:@"00:00:00:00:00:00"] || [address isEqualToString:@"02:00:00:00:00:00"] ) {
 
-      NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.vxstat.objc"];
+      NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.vxstat.statistics"];
       NSString *uuid = [userDefaults objectForKey:@"uuid"];
       if ( uuid == nil ) {
 
@@ -82,7 +82,7 @@ static Device *m_deviceInstance;
       /* Convert MD5 value in the buffer to NSString of hex values */
       NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
       for ( int i = 0; i < CC_MD5_DIGEST_LENGTH; i++ )
-        [output appendFormat:@"%02x", md5Buffer[i]];
+      [output appendFormat:@"%02x", md5Buffer[i]];
 
       m_uniqueIdentifier = [NSString stringWithFormat:@"%@-%@-%@-%@-%@", [output substringWithRange:NSMakeRange(0, 8)], [output substringWithRange:NSMakeRange(8, 4)], [output substringWithRange:NSMakeRange(12, 4)], [output substringWithRange:NSMakeRange(16, 4)], [output substringWithRange:NSMakeRange(20, 12)]];
     }
@@ -94,27 +94,41 @@ static Device *m_deviceInstance;
 
 + (BOOL)isJailbroken {
 
-  #if TARGET_OS_IPHONE && !(TARGET_IPHONE_SIMULATOR)
-  if ( [[NSFileManager defaultManager] fileExistsAtPath:@"/Applications/Cydia.app"] )
-    return YES;
-  else if ( [[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/MobileSubstrate.dylib"] )
-    return YES;
-  else if ([[NSFileManager defaultManager] fileExistsAtPath:@"/bin/bash"] )
-    return YES;
-  else if ([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/sbin/sshd"] )
-    return YES;
-  else if ( [[NSFileManager defaultManager] fileExistsAtPath:@"/etc/apt"] )
-    return YES;
+#if TARGET_OS_IPHONE && !(TARGET_IPHONE_SIMULATOR)
+  if ( [[NSFileManager defaultManager] fileExistsAtPath:@"/Applications/Cydia.app"] ) {
 
-  NSError *error;
+    return YES;
+  }
+  else if ( [[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/MobileSubstrate.dylib"] ) {
+
+    return YES;
+  }
+  else if ([[NSFileManager defaultManager] fileExistsAtPath:@"/bin/bash"] ) {
+
+    return YES;
+  }
+  else if ([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/sbin/sshd"] ) {
+
+    return YES;
+  }
+  else if ( [[NSFileManager defaultManager] fileExistsAtPath:@"/etc/apt"] ) {
+
+    return YES;
+  }
+
+  NSError *error = nil;
   NSString *stringToBeWritten = @"This is a test.";
   [stringToBeWritten writeToFile:@"/private/jailbreak.txt" atomically:YES encoding:NSUTF8StringEncoding error:&error];
-  if ( error == nil )
+  if ( error == nil ) {
+
     /* Device is jailbroken */
     return YES;
-  else
+  }
+  else {
+
     [[NSFileManager defaultManager] removeItemAtPath:@"/private/jailbreak.txt" error:nil];
-  #endif
+  }
+#endif
 
   /* All checks have failed. Most probably, the device is not jailbroken */
   return NO;
@@ -128,9 +142,9 @@ static Device *m_deviceInstance;
 
 - (NSString *)model {
 
-  #if TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR
   return @"iOS Simulator";
-  #else
+#else
   NSString *platform = m_platform;
   NSRange range = [platform rangeOfString:@","];
   NSInteger versionBegin = range.location;
@@ -147,15 +161,15 @@ static Device *m_deviceInstance;
       --versionBegin;
   }
   return [platform substringWithRange:NSMakeRange(0, versionBegin)];
-  #endif
+#endif
 }
 
 - (NSString *)version {
 
   NSString *platform = m_platform;
-  #if TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR
   return platform;
-  #else
+#else
   NSRange range = [platform rangeOfString:@","];
   NSInteger versionBegin = range.location;
   if ( versionBegin > 1 ) {
@@ -170,25 +184,24 @@ static Device *m_deviceInstance;
     if ( chr >= '0' && chr <= '9' )
       --versionBegin;
   }
-
   return [platform substringWithRange:NSMakeRange(versionBegin, [platform length] - versionBegin)];
-  #endif
+#endif
 }
 
 + (NSString *)osName {
 
-  #if TARGET_OS_MAC && !(TARGET_OS_IPHONE)
+#if TARGET_OS_MAC && !(TARGET_OS_IPHONE)
   return @"macOS";
-  #endif
-  #if TARGET_OS_IPHONE
+#endif
+#if TARGET_OS_IPHONE
   return @"iOS";
-  #endif
-  #if TARGET_OS_WATCH
+#endif
+#if TARGET_OS_WATCH
   return @"watchOS";
-  #endif
-  #if TARGET_OS_TV
+#endif
+#if TARGET_OS_TV
   return @"tvOS";
-  #endif
+#endif
 }
 
 + (NSString *)osVersion {
@@ -215,23 +228,31 @@ static Device *m_deviceInstance;
   mgmtInfoBase[4] = NET_RT_IFLIST; /* Request all configured interfaces */
 
   /* With all configured interfaces requested, get handle index */
-  if ( ( mgmtInfoBase[5] = if_nametoindex( "en0" ) ) == 0)
+  if ( ( mgmtInfoBase[5] = if_nametoindex( "en0" ) ) == 0) {
+
     errorFlag = @"if_nametoindex failure";
+  }
   else {
 
     /* Get the size of the data available (store in len) */
-    if ( sysctl( mgmtInfoBase, 6, nil, &length, nil, 0 ) < 0 )
+    if ( sysctl( mgmtInfoBase, 6, nil, &length, nil, 0 ) < 0 ) {
+
       errorFlag = @"sysctl mgmtInfoBase failure";
+    }
     else {
 
       /* Alloc memory based on above call */
-      if ( ( msgBuffer = malloc( length ) ) == nil )
+      if ( ( msgBuffer = malloc( length ) ) == nil ) {
+
         errorFlag = @"buffer allocation failure";
+      }
       else {
 
         /* Get system information, store in buffer */
-        if ( sysctl( mgmtInfoBase, 6, msgBuffer, &length, nil, 0 ) < 0 )
+        if ( sysctl( mgmtInfoBase, 6, msgBuffer, &length, nil, 0 ) < 0 ) {
+
           errorFlag = @"sysctl msgBuffer failure";
+        }
       }
     }
   }
@@ -239,9 +260,9 @@ static Device *m_deviceInstance;
   /* Befor going any further... */
   if ( errorFlag.length > 0 ) {
 
-    #ifdef DEBUG
+#ifdef DEBUG
     NSLog(@"Error: %@", errorFlag);
-    #endif
+#endif
     return nil;
   }
 
@@ -250,10 +271,10 @@ static Device *m_deviceInstance;
 
   /* Map to link-level socket structure */
   socketStruct = (struct sockaddr_dl *) (interfaceMsgStruct + 1);
-  
+
   /* nil check */
   if ( socketStruct == nil ) {
-    
+
     return nil;
   }
 
@@ -262,9 +283,9 @@ static Device *m_deviceInstance;
 
   /* Read from char array into a string object, into traditional Mac address format */
   NSString *macAddressString = [NSString stringWithFormat:@"%02X:%02X:%02X:%02X:%02X:%02X", macAddress[0], macAddress[1], macAddress[2], macAddress[3], macAddress[4], macAddress[5]];
-  #ifdef DEBUG
-//  NSLog(@"Mac Address: %@", macAddressString);
-  #endif
+#ifdef DEBUG
+  //  NSLog(@"Mac Address: %@", macAddressString);
+#endif
 
   /* Release the buffer memory */
   free(msgBuffer);
@@ -281,8 +302,10 @@ static Device *m_deviceInstance;
 
 + (Device *)currentDevice {
 
-  if ( m_deviceInstance == nil )
+  if ( m_deviceInstance == nil ) {
+
     m_deviceInstance = [[Device alloc] init];
+  }
   return m_deviceInstance;
 }
 
