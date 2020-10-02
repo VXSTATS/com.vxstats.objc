@@ -212,10 +212,32 @@ static Statistics *m_statisticInstance;
   NSLocale *locale = [NSLocale currentLocale];
   [core appendString:[NSString stringWithFormat:@"language=%@&", [locale objectForKey:NSLocaleLanguageCode]]];
   NSString *country = [locale objectForKey:NSLocaleCountryCode];
-  /* TODO: Write a map? Does it only come from simulator!? */
   if ( [country length] == 0 ) {
 
+#if TARGET_OS_IPHONE && !(TARGET_OS_WATCH) && !(TARGET_OS_TV)
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_12_1
+    CTCarrier *provider = nil;
+    NSDictionary<NSString *, CTCarrier *> *providers = [[CTTelephonyNetworkInfo new] serviceSubscriberCellularProviders];
+    for ( NSString *key in providers ) {
+
+      provider = providers[key];
+      break;
+    }
+#elif __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_12_0
+    CTCarrier *provider = nil;
+    NSDictionary<NSString *, CTCarrier *> *providers = [[CTTelephonyNetworkInfo new] valueForKey:@"serviceSubscriberCellularProvider"];
+    for ( NSString *key in providers ) {
+
+      provider = providers[key];
+      break;
+    }
+#else
+    CTCarrier *provider = [[CTTelephonyNetworkInfo new] subscriberCellularProvider];
+#endif
+    country = provider.isoCountryCode;
+#else
     country = @"US";
+#endif
   }
   [core appendString:[NSString stringWithFormat:@"country=%@&", country]];
 
@@ -225,10 +247,24 @@ static Statistics *m_statisticInstance;
   /* radio - */
 #if TARGET_OS_IPHONE && !(TARGET_OS_WATCH) && !(TARGET_OS_TV)
   CTTelephonyNetworkInfo *telephonyInfo = [CTTelephonyNetworkInfo new];
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_12_0
-  // TODO: Write code to find the current radio access technologie
-  NSLog(@"Tele: %@", [telephonyInfo serviceCurrentRadioAccessTechnology]);
-  NSString *currentRadioAccess = @""; //[telephonyInfo.serviceCurrentRadioAccessTechnology];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_12_1
+  NSDictionary<NSString *, NSString *> *radioAccessTechnologies = [telephonyInfo serviceCurrentRadioAccessTechnology];
+  NSString *currentRadioAccess = @"";
+  for ( NSString *key in radioAccessTechnologies ) {
+
+    currentRadioAccess = radioAccessTechnologies[key];
+    break;
+  }
+  currentRadioAccess = [currentRadioAccess stringByReplacingOccurrencesOfString:@"CTRadioAccessTechnology" withString:@""];
+#elif __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_12_0
+  NSDictionary<NSString *, NSString *> *radioAccessTechnologies = [telephonyInfo valueForKey:@"serviceCurrentRadioAccessTechnology"];
+  NSString *currentRadioAccess = @"";
+  for ( NSString *key in radioAccessTechnologies ) {
+
+    currentRadioAccess = radioAccessTechnologies[key];
+    break;
+  }
+  currentRadioAccess = [currentRadioAccess stringByReplacingOccurrencesOfString:@"CTRadioAccessTechnology" withString:@""];
 #else
   NSString *currentRadioAccess = [telephonyInfo.currentRadioAccessTechnology stringByReplacingOccurrencesOfString:@"CTRadioAccessTechnology" withString:@""];
 #endif
@@ -338,6 +374,7 @@ static Statistics *m_statisticInstance;
     NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration:defaultSessionConfiguration delegate:self delegateQueue:nil];
     NSURLSessionDataTask *session = [defaultSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
 
+#pragma unused(data)
       if ( response == nil || error != nil ) {
 
 #ifdef DEBUG
@@ -375,8 +412,10 @@ static Statistics *m_statisticInstance;
   NSArray *messages = [userDefaults objectForKey:@"offline"];
   [userDefaults removeObjectForKey:@"offline"];
   [userDefaults synchronize];
-  for ( NSUInteger x = 0; x < [messages count]; ++x )
-  [self sendMessage:[messages objectAtIndex:x]];
+  for ( NSUInteger x = 0; x < [messages count]; ++x ) {
+
+    [self sendMessage:[messages objectAtIndex:x]];
+  }
 }
 
 - (void)updateInterfaceWithReachability:(Reachability *)reachability {

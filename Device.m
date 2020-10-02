@@ -81,9 +81,10 @@ static Device *m_deviceInstance;
 
       /* Convert MD5 value in the buffer to NSString of hex values */
       NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
-      for ( int i = 0; i < CC_MD5_DIGEST_LENGTH; i++ )
-      [output appendFormat:@"%02x", md5Buffer[i]];
+      for ( int i = 0; i < CC_MD5_DIGEST_LENGTH; i++ ) {
 
+        [output appendFormat:@"%02x", md5Buffer[i]];
+      }
       m_uniqueIdentifier = [NSString stringWithFormat:@"%@-%@-%@-%@-%@", [output substringWithRange:NSMakeRange(0, 8)], [output substringWithRange:NSMakeRange(8, 4)], [output substringWithRange:NSMakeRange(12, 4)], [output substringWithRange:NSMakeRange(16, 4)], [output substringWithRange:NSMakeRange(20, 12)]];
     }
   }
