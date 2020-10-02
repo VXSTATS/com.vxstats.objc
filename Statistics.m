@@ -287,6 +287,12 @@ static Statistics *m_statisticInstance;
   }
 
   /* is this app fairly used? */
+  if ( [Device dark] ) {
+
+    [core appendString:[NSString stringWithFormat:@"dark=%i&", 1]];
+  }
+
+  /* is this app fairly used? */
   if ( [App fairUse] ) {
 
     [core appendString:[NSString stringWithFormat:@"fair=%i&", 1]];

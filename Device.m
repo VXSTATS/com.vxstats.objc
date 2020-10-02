@@ -135,6 +135,11 @@ static Device *m_deviceInstance;
   return NO;
 }
 
++ (BOOL)dark {
+
+  return [[[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"] length] > 0;
+}
+
 #pragma mark - Info
 
 - (NSString *)platformString { return m_platform; }
