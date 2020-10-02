@@ -91,6 +91,11 @@ static Device *m_deviceInstance;
   return self;
 }
 
++ (BOOL)dark {
+
+  return [[[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"] length] > 0;
+}
+
 #pragma mark - Hacked
 
 + (BOOL)isJailbroken {
@@ -133,11 +138,6 @@ static Device *m_deviceInstance;
 
   /* All checks have failed. Most probably, the device is not jailbroken */
   return NO;
-}
-
-+ (BOOL)dark {
-
-  return [[[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"] length] > 0;
 }
 
 #pragma mark - Info
