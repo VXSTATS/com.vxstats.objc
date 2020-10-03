@@ -222,8 +222,8 @@ static Device *m_deviceInstance;
   char *msgBuffer = nil;
   size_t length;
   unsigned char macAddress[6];
-  struct if_msghdr *interfaceMsgStruct;
-  struct sockaddr_dl *socketStruct;
+  struct if_msghdr *interfaceMsgStruct = nil;
+  struct sockaddr_dl *socketStruct = nil;
   NSString *errorFlag = nil;
 
   /* Setup the management Information Base (mib) */
