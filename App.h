@@ -42,11 +42,11 @@
 /**
  * @~english
  * @brief Returns the name of application. E.g. My Application (CFBundleDisplayName)
- * @return Identifier of application.
+ * @return Name of application.
  *
  * @~german
- * @brief Gibt dien Namen der Anwendung zurück. Bsp.: Meine Anwendung (CFBundleDisplayName)
- * @return Id der Anwendug.
+ * @brief Gibt den Namen der Anwendung zurück. Bsp.: Meine Anwendung (CFBundleDisplayName)
+ * @return Name der Anwendug.
  */
 + (NSString *)name;
 

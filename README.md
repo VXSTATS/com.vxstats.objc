@@ -25,7 +25,7 @@ Checkout and open project with XCode. You need openssl.framework (https://github
 All values are defined over Info.plist and used from there.
 
 ## Setup
-Setup your environment with your credentials. Please insert your username, password and url here. For defuscation please follow our best practice documentation.
+Set up your environment with your credentials. Please insert your username, password and url here. For obfuscation please follow our best practice documentation.
 ```objective-c
 [[Statistics instance] username:@"sandbox"];
 [[Statistics instance] password:@"sandbox"];
@@ -33,13 +33,13 @@ Setup your environment with your credentials. Please insert your username, passw
 ```
 
 ## Page
-This is the global context, where you are currently on in your application. Just name it easy and with logical app structure to identify where the user stays.
+This is the global context that you are currently in in your application. Just give it a simple name with logical app structure to identify where the user stays.
 ```objective-c
 [[Statistics instance] page:@"Main"];
 ```
 
 ## Event
-When you would like to request a page with dynamic content please use this function.
+If you want to request a page with dynamic content please use this function.
 ```objective-c
 [[Statistics instance] event:@"$action" value:@"$value"];
 ```
@@ -69,13 +69,13 @@ To capture played files including the information which file/action has been pla
 ```
 
 ### Search
-To capture searches including the information for which has been searched.
+To capture searches including the information for what has been searched.
 ```objective-c
 [[Statistics instance] search:@"$search"];
 ```
 
 ### Shake
-To capture when the device has been shaken.
+To capture when the device was shaken.
 ```objective-c
 [[Statistics instance] shake];
 ```
@@ -107,4 +107,4 @@ To capture typed/touched actions.
 
 # Pending Issues
 ## App Store
-We have already successfully passed the review process. If you have issues of the review process, please let us know and ask for support@vxapps.com to solve your needs.
+We have successfully passed the review process already. If you have problems with the review process, please let us know and ask for support@vxapps.com to solve the issue.

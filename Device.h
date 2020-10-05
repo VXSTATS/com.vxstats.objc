@@ -22,7 +22,7 @@
  * Delivers information about current device.
  *
  * @~german
- * @brief Die Device Klasse.
+ * @brief Die Klasse Device.
  * Liefert Informationen zum aktuellen Gerät.
  */
 @interface Device : NSObject {
@@ -39,7 +39,7 @@
 
   /**
    * @~english
-   * @brief The device unique identifier.
+   * @brief The unique device identifier.
    *
    * @~german
    * @brief Die eindeutige Id des Geräts.
@@ -71,11 +71,11 @@
 
 /**
  * @~english
- * @brief The internal string for the platform.
+ * @brief Returns the internal string for the platform.
  * @return The internal string for the platform.
  *
  * @~german
- * @brief Der interne String für die Plattform.
+ * @brief Gibt den internen String für die Plattform zurück.
  * @return Der interne String für die Plattform.
  */
 - (NSString *)platformString;
@@ -104,22 +104,22 @@
 
 /**
  * @~english
- * @brief The name of the operating system, e.g. iOS
+ * @brief Returns the name of the operating system, e.g. iOS
  * @return The name of the operating system.
  *
  * @~german
- * @brief Der Name des Betriebssystems, z.B. iOS
+ * @brief Gibt den Namen des Betriebssystems zurück, z.B. iOS
  * @return Der Name des Betriebssystems.
  */
 + (NSString *)osName;
 
 /**
  * @~english
- * @brief The version of the operating system, e.g. 9.3.3
+ * @brief Returns the version of the operating system, e.g. 9.3.3
  * @return The version of the operating system.
  *
  * @~german
- * @brief Die Version des Betriebssystems, z.B. 9.3.3
+ * @brief Gibt die Version des Betriebssystems zurück, z.B. 9.3.3
  * @return Die Version des Betriebssystems.
  */
 + (NSString *)osVersion;

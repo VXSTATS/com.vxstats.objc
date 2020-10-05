@@ -24,39 +24,39 @@
  * @brief Communication with the statistics server.
  *
  * @b General:
- * @n The class communicates to the statistics server in order to transfer a
+ * @n The class communicates with the statistics server in order to transfer a
  * page impression or an action/event.
  *
  * @b Security:
  * @n There is a multi-level security concept:
  * @n 1. Communication must be authenticated via htaccess.
- * @n 2. Configuration should be carried out via HTTPS only so that all data is
+ * @n 2. Configuration should be carried out via HTTPS only, so that all data is
  * encrypted and cannot be manipulated.
  * @n 3. Communication should be carried out via POST only. Only specific tools
  * make a manipulation of data possible.
- * @n 4. On the server part all values are checked for validity, invalid entries
+ * @n 4. On the server part, all values are checked for validity; invalid entries
  * are excluded.
  *
  * @b Threads:
- * @n The class is thread safe and can be executed in MainThread or in a
+ * @n The class is thread-safe and can be executed in MainThread or in a
  * BackgroundThread of the application.
  * The queries are processed asynchronously or synchronously.
  *
  * @b Offline entries:
  * @n Statistic entries that have not been sent successfully are filed in a
- * queue of local settings and sent
- * as soon as an internet connection exists. Estimations assume that there is
+ * queue of local settings and sent as soon as an 
+ * internet connection is established. Estimations assume that there is
  * less than 5% not received statistic data.
  *
  * @b Data privacy:
  * @n Unique data is processed but no position data and also no user data that
  * can be allocated directly.
  * No third party is involved in the processing of data. The system with default
- * settings is configured with security and anonymity.
+ * settings is configured for security and anonymity.
  *
  * @b Application:
  * @n Besides an API for iPhone/iPad/iPod touch and Android, e.g. C#, C, C++,
- * PHP, JavaScript and Java is also supported. Further formats can be supported
+ * PHP, JavaScript, and Java is also supported. Further formats can be supported
  * upon request.
  *
  * @b Example:
@@ -79,33 +79,33 @@
  *
  * @b Allgemein:
  * @n Diese Klasse kommuniziert zum Statistikserver um eine Seitenimpression
- * oder eine Aktion/Event zu übertragen.
+ * oder eine Aktion/ein Event zu übertragen.
  *
  * @b Sicherheit:
  * @n Es ist ein mehrstufiges Sicherheitskonzept vorhanden:
- * @n 1. Kommunikation muss authentifiziert werden über htaccess.
+ * @n 1. Kommunikation muss über htaccess authentifiziert werden.
  * @n 2. Konfiguration sollte nur über HTTPS erfolgen, damit werden alle Daten
  * verschlüsselt und können nicht manipuliert werden.
- * @n 3. Kommunikation erfolgt ausschließlich über POST. Erst spezielle Tools
+ * @n 3. Kommunikation sollte ausschließlich über POST erfolgen. Nur spezielle Tools
  * erlauben somit eine Manipulation von Daten.
  * @n 4. Serverseitig werden alle Werte auf Gültigkeit überprüft, ungültige
  * Einträge sind ausgeschlossen.
  *
  * @b Threads:
- * @n Die Klasse ist Thread safe und kann sowohl im MainThread ausgeführt werden
+ * @n Die Klasse ist threadsicher und kann sowohl im MainThread ausgeführt werden
  * oder in einem BackgroundThread der Anwendung. Die Anfragen werden
  * entsprechend asynchron oder synchron abgearbeitet.
  *
  * @b Offline-Einträge:
  * @n Nicht erfolgreich versendete Statistikeinträge werden in einer Queue der
- * lokalen Einstellungen abgelegt und versendet sobald wieder eine
+ * lokalen Einstellungen abgelegt und versendet, sobald wieder eine
  * Internetverbindung besteht. Schätzungen gehen von weniger als 5% nicht
  * empfangener Statistikdaten aus.
  *
  * @b Datenschutz:
  * @n Es werden zwar eindeutige Daten verarbeitet, aber keine Positionsdaten und
- * auch keine direkt zuordenbare Benutzerdaten. Sie sind Herr der Daten, es ist
- * kein Dritter bei der Verarbeitung der Daten involviert. Das System in der
+ * auch keine Benutzerdaten, die direkt zugeordnet werden können. Dritte sind nicht an
+ * der Verarbeitung der Daten beteiligt. Das System in der
  * Standardkonfiguration ist auf Sicherheit und Anonymität ausgelegt.
  *
  * @b Verwendung:
@@ -151,19 +151,19 @@
 
   /**
    * @~english
-   * @brief Username for authentication.
+   * @brief Username for authorization.
    *
    * @~german
-   * @brief Benutzername für die Authorisierung.
+   * @brief Benutzername für die Autorisierung.
    */
   NSString *m_username;
 
   /**
    * @~english
-   * @brief Password for authentication.
+   * @brief Password for authorization.
    *
    * @~german
-   * @brief Passwort für die Authorisierung.
+   * @brief Passwort für die Autorisierung.
    */
   NSString *m_password;
 
@@ -173,7 +173,7 @@
    * search comfortably.
    *
    * @~german
-   * @brief Die zuletzt verwendete Seite wird zwischengespeichert um die
+   * @brief Die zuletzt verwendete Seite wird zwischengespeichert, um die
    * Aktionen und Suchen komfortabel zu verwenden.
    */
   NSString *lastPageName;
@@ -193,8 +193,8 @@
    * transfer pending data.
    *
    * @~german
-   * @brief Überprüfen der Verbindung um die Verbindungsgeschwindigkeit zu
-   * ermitteln oder ausstehende Daten zu übermitteln.
+   * @brief Überprüfen der Verbindung, um die Verbindungsgeschwindigkeit zu
+   * ermitteln oder ausstehende Daten zu senden.
    */
   Reachability *m_reachability;
 }
@@ -205,7 +205,7 @@
  * comfortably.
  *
  * @~german
- * @brief Die zuletzt verwendete Seite wird zwischengespeichert um die Aktionen
+ * @brief Die zuletzt verwendete Seite wird zwischengespeichert, um die Aktionen
  * und Suchen komfortabel zu verwenden.
  */
 @property (nonatomic, copy, readonly) NSString *lastPageName;
@@ -230,8 +230,9 @@
  * @~german
  * @brief Definiert den Pfad und Namen zum Statistikserver.
  * @param serverFilePath   Der Dateiname zum Statistikserver.
+ *
  * @b Beispiel:
- * @n Für die HTTPS Adresse sandbox.vxstats.com und dem Verzeichnis /.
+ * @n Für die HTTPS-Adresse sandbox.vxstats.com und das Verzeichnis /.
  *
  * @~
  * @code
@@ -273,30 +274,30 @@
 - (void)password:(NSString *)password;
 
 /**
- * @~german
- * @brief Aufruf einer Seite mit dem Namen pageName um es an den Statistikserver
- * zu übermitteln.
- * @param pageName   The name of the requested page.
- * @note Limited to 255 characters.
- *
  * @~english
  * @brief Request a page with the name pageName in order to transfer it to the
  * statistics server.
+ * @param pageName   The name of the requested page.
+ * @note Limited to 255 characters.
+ *
+ * @~german
+ * @brief Aufruf einer Seite mit dem Namen pageName um es an den Statistikserver
+ * zu übermitteln.
  * @param pageName   Der Name der aufgerufenen Seite.
- * @note Auf 255 Zeichen begrentzt.
+ * @note Auf 255 Zeichen begrenzt.
  */
 - (void)page:(NSString *)pageName;
 
 /**
  * @~english
- * @brief When you would like to request a page with dynamic content please use
+ * @brief If you would like to request a page with dynamic content please use
  * this function.
  *
  * @b Example:
  * @n Page with ads.
  *
  * @~german
- * @brief Wenn Sie eine Seite aufrufen möchten mit dynamischem Inhalt verwenden
+ * @brief Wenn Sie eine Seite mit dynamischem Inhalt aufrufen möchten, verwenden
  * Sie diese Funktion.
  *
  * @b Beispiel:
@@ -340,7 +341,7 @@
  *
  * @~german
  * @b Beispiel:
- * @n Browser mit URL.
+ * @n Browser mit URL öffnen.
  *
  * @~
  * @code
@@ -374,9 +375,15 @@
  * [[Statistics instance] play:urlOrName];
  * @endcode
  *
- * @~english @b Example: @~german @b Beispiel:
- * @~english @n Search for 'asdf'. @~german @n Suchen nach 'asdf'.
+ * @~english 
+ * @b Example: 
+ * @n Search for 'asdf'.
+ *
+ * @~german 
+ * @b Beispiel:
+ * @n Suchen nach 'asdf'.
  * @~
+ *
  * @code
  * [[Statistics instance] event:@"search" withValue:text];
  * [[Statistics instance] event:@"search" withValue:@"asdf"];
@@ -388,9 +395,15 @@
  * [[Statistics instance] search:text];
  * @endcode
  *
- * @~english @b Example: @~german @b Beispiel:
- * @~english @n Shake the device. @~german @n Das Gerät schütteln.
+ * @~english 
+ * @b Example: 
+ * @n Shake the device.
+ *
+ * @~german 
+ * @b Beispiel:
+ * @n @n Das Gerät schütteln.
  * @~
+ *
  * @code
  * [[Statistics instance] event:@"shake" withValue:nil];
  * @endcode
@@ -401,10 +414,15 @@
  * [[Statistics instance] shake];
  * @endcode
  *
- * @~english @b Example: @~german @b Beispiel:
- * @~english @n Touch the button for navigation. @~german @n Button für
- * Navitation drücken.
+ * @~english 
+ * @b Example: 
+ * @n Touch the button for navigation.
+ *
+ * @~german 
+ * @b Beispiel:
+ * @n Button für Navitation drücken.
  * @~
+ *
  * @code
  * [[Statistics instance] event:@"touch" withValue:action];
  * [[Statistics instance] event:@"touch" withValue:@"Navigation"];
@@ -434,7 +452,7 @@
  * @brief Für das Erfassen von Werbeeinblendungen - entsprechend die angezeigte
  * Werbung.
  * @param campaign   Die angezeigte Werbung.
- * @note Auf 255 Zeichen begrentzt.
+ * @note Auf 255 Zeichen begrenzt.
  *
  * @~
  * @see Statistics#event:withValue:
@@ -452,7 +470,7 @@
  * @param longitude   Longitude of center.
  *
  * @~german
- * Für die Erfassung von Kartenverschiebungen - entsprechend das neue Zentrum.
+ * @brief Für die Erfassung von Kartenverschiebungen - entsprechend das neue Zentrum.
  * @param latitude   Latitude des Zentrums.
  * @param longitude   Longitude des Zentrums.
  *
@@ -473,10 +491,10 @@
  * @note Limited to 255 characters.
  *
  * @~german
- * @brief Für das Erfassen von geöffneten Webseiten oder Dokumenten mit der
- * Information, welche Seite, bzw. welches Dokument aufgerufen wurde.
+ * @brief Für die Erfassung von geöffneten Webseiten oder Dokumenten mit der
+ * Information, welche Seite bzw. welches Dokument aufgerufen wurde.
  * @param urlOrName   Die angezeigte Webseite/das angezeigte Dokument.
- * @note Auf 255 Zeichen begrentzt.
+ * @note Auf 255 Zeichen begrenzt.
  *
  * @~
  * @see Statistics#event:withValue:
@@ -495,10 +513,10 @@
  * @note Limited to 255 characters.
  *
  * @~german
- * @brief Für das Erfassen von abgespielten Dateien mit der Info, welche
- * Datei/Aktion abgespielt wurde.
+ * @brief Für die Erfassung von abgespielten Dateien mit der Information,
+ * welche Datei/Aktion abgespielt wurde.
  * @param urlOrName   Die abgespielte Datei.
- * @note Auf 255 Zeichen begrentzt.
+ * @note Auf 255 Zeichen begrenzt.
  *
  * @~
  * @see Statistics#event:withValue:
@@ -511,15 +529,15 @@
 
 /**
  * @~english
- * @brief To capture searches including the information for which has been
+ * @brief To capture searches including the information for what has been
  * searched.
- * @param text   Der gesuchte Text.
- * @note Auf 255 Zeichen begrentzt.
- *
- * @~german
- * @brief Für die Erfassung von Suchen mit der Info, nach was gesucht wurde.
  * @param text   The searched text.
  * @note Limited to 255 characters.
+ *
+ * @~german
+ * @brief Für die Erfassung von Suchen mit der Information, nach was gesucht wurde.
+ * @param text   Der gesuchte Text.
+ * @note Auf 255 Zeichen begrenzt.
  *
  * @~
  * @see Statistics#event:withValue:
@@ -535,7 +553,7 @@
  * @brief To capture when the device has been shaken.
  *
  * @~german
- * @brief Für das Erfassen, wann das Gerät geschüttelt wurde.
+ * @brief Für die Erfassung, wann das Gerät geschüttelt wurde.
  *
  * @~
  * @see Statistics#event:withValue:
@@ -555,7 +573,7 @@
  * @~german
  * @brief Für die Erfassung von getippten/gedrückten Aktionen.
  * @param action   Der Name der getippten/gedrückten Aktion.
- * @note Auf 255 Zeichen begrentzt.
+ * @note Auf 255 Zeichen begrenzt.
  *
  * @~
  * @see Statistics#event:withValue:
@@ -570,9 +588,9 @@
  * @~english
  * @brief The instance for statistics.
  * The statistics system is initialized and creates a database for offline
- * statistics that is only been sent if a connection to the statistics server
+ * statistics that is only sent if a connection to the statistics server
  * could be established. Please provide necessary settings for the communication
- * to the server, its path and which explicit values should also be collected.
+ * to the server, its path, and which explicit values are also supposed to be collected.
  *
  * The communication to the server needs a token in order to get the
  * authorization to capture statistic values.
@@ -583,18 +601,18 @@
  *
  * @~german
  * @brief Die Instanz für Statistiken.
- * Das Statistisystem wird initaliziert und erstellt eine Datenbank für Offline
+ * Das Statistisystem wird initalisiert und erstellt eine Datenbank für Offline
  * Statistik, die nur versendet wird, wenn eine Verbindung zum Statistikserver
  * hergestellt werden konnte. Bitte hinterlegen Sie nötige Einstellungen für die
- * Kommunikation zum Server, dessen Pfad und welche explizieten Werte ebenfalls
+ * Kommunikation zum Server, dessen Pfad und welche expliziten Werte ebenfalls
  * gesammelt werden sollen.
  *
- * Die Kommunikation zum Server verlangt einen Token um die Erlaubnis zu
- * erhalten statistische Werte zu erfassen.
- * Die gesamte Kommunikation wird über das http(s) Protokoll via POST
+ * Die Kommunikation zum Server verlangt einen Token, um die Erlaubnis zu
+ * erhalten, statistische Werte zu erfassen.
+ * Die gesamte Kommunikation wird über das http(s)-Protokoll via POST
  * übermittelt.
- * @note Bitte nur https mit TLS 1.2 und HSTS oder besser und ipv6 Unterstützung
- * verwenden
+ * @note Bitte nur https mit TLS 1.2 und HSTS oder besser und ipv6-Unterstützung
+ * verwenden.
  * @return Die Instanz für Statistiken.
  */
 + (Statistics *)instance;
