@@ -22,7 +22,7 @@ Checkout and open project with XCode. You need openssl.framework (https://github
 
 # Implementation
 ## Pre-Setup
-All values are defined over Info.plist and used from there.
+All values are defined through Info.plist and used from there.
 
 ## Setup
 Set up your environment with your credentials. Please insert your username, password and url here. For obfuscation please follow our best practice documentation.
