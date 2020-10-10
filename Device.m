@@ -289,8 +289,9 @@ static Device *m_deviceInstance;
 
   /* Read from char array into a string object, into traditional Mac address format */
   NSString *macAddressString = [NSString stringWithFormat:@"%02X:%02X:%02X:%02X:%02X:%02X", macAddress[0], macAddress[1], macAddress[2], macAddress[3], macAddress[4], macAddress[5]];
+  macAddressString = [macAddressString lowercaseString];
 #ifdef DEBUG
-  //  NSLog(@"Mac Address: %@", macAddressString);
+  NSLog(@"Mac Address: %@", macAddressString);
 #endif
 
   /* Release the buffer memory */
