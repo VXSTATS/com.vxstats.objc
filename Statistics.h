@@ -260,11 +260,11 @@
 /**
  * @~english
  * @brief Defines the password to the statistics server.
- * @param username   The password to the statistics server.
+ * @param password   The password to the statistics server.
  *
  * @~german
  * @brief Definiert das Passwort zum Statistikserver.
- * @param username   Das Passwoort zum Statistikserver.
+ * @param password   Das Passwoort zum Statistikserver.
  *
  * @~
  * @code
