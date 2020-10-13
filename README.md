@@ -18,7 +18,7 @@
    * [App Store](#app-store)
 
 # Preparation
-Checkout and open project with XCode. You need openssl.framework (https://github.com/krzyzanowskim/OpenSSL) inside same folder.
+Checkout and open project with XCode. You need [openssl.framework](https://github.com/krzyzanowskim/OpenSSL) inside same folder.
 
 # Implementation
 ## Pre-Setup
