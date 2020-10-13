@@ -91,7 +91,7 @@ static Device *m_deviceInstance;
   return self;
 }
 
-+ (BOOL)dark {
++ (BOOL)useDarkMode {
 
   return [[[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"] length] > 0;
 }

@@ -49,14 +49,14 @@
 
 /**
  * @~english
- * @brief Returns true, if the device run in darkmode.
- * @return True, if the device run in darkmode - otherwise false.
+ * @brief Returns true, if the device run in dark mode.
+ * @return True, if the device run in dark mode - otherwise false.
  *
  * @~german
  * @brief Gibt wahr zurück, wenn die Plattform den Darkmode verwendet.
  * @return Wahr, wenn die Plattform den Darkmode verwendet - sonst falsch.
  */
-+ (BOOL)dark;
++ (BOOL)useDarkMode;
 
 /**
  * @~english

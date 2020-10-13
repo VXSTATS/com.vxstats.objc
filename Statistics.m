@@ -287,7 +287,7 @@ static Statistics *m_statisticInstance;
   }
 
   /* is this app fairly used? */
-  if ( [Device dark] ) {
+  if ( [Device useDarkMode] ) {
 
     [core appendString:[NSString stringWithFormat:@"dark=%i&", 1]];
   }

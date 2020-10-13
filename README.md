@@ -25,7 +25,7 @@ Checkout and open project with XCode. You need openssl.framework (https://github
 All values are defined through Info.plist and used from there.
 
 ## Setup
-Set up your environment with your credentials. Please insert your username, password and url here. For obfuscation please follow our best practice documentation.
+Set up your environment with your credentials. Please insert your username, password and url here. For obfuscation, please follow our best practice documentation.
 ```objective-c
 [[Statistics instance] username:@"sandbox"];
 [[Statistics instance] password:@"sandbox"];
@@ -33,13 +33,13 @@ Set up your environment with your credentials. Please insert your username, pass
 ```
 
 ## Page
-This is the global context that you are currently in in your application. Just give it a simple name with logical app structure to identify where the user stays.
+This is the global context that you are currently in your application. Just give it a simple name with logical app structure to identify where the user stays.
 ```objective-c
 [[Statistics instance] page:@"Main"];
 ```
 
 ## Event
-If you want to request a page with dynamic content please use this function.
+If you want to request a page with dynamic content, please use this function.
 ```objective-c
 [[Statistics instance] event:@"$action" value:@"$value"];
 ```
