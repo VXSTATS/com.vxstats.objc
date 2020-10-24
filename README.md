@@ -107,4 +107,4 @@ To capture typed/touched actions.
 
 # Pending Issues
 ## App Store
-We have successfully passed the review process already. If you have problems with the review process, please let us know and ask for support@vxapps.com to solve the issue.
+We have successfully passed the review process already. If you have problems with the review process, please let us know and ask for support@vxstats.com to solve the issue.
