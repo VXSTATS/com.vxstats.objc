@@ -88,7 +88,7 @@ To capture typed/touched actions.
 
 # Compatiblity
 ## macOS
-- *macOS 10.16  - (not yet supported)*
+- macOS 11.0
 - macOS 10.15
 - macOS 10.14
 - macOS 10.13
